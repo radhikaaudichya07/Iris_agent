@@ -418,17 +418,44 @@ except Exception as e:
 
 
 def _start_health_server():
-    """Some hosts (e.g. Render web services) require an open HTTP port. If PORT is
-    set we serve a tiny 200 OK; Socket Mode itself needs no inbound port."""
+    """Serves the landing page at / and the architecture diagram at /architecture,
+    on the same host that runs the Socket Mode agent. Any other path returns a 200
+    health check (keeps free hosts awake). Socket Mode itself needs no inbound port."""
     port = int(os.environ.get("PORT", "0") or 0)
     if not port:
         return
     import threading
     from http.server import BaseHTTPRequestHandler, HTTPServer
 
+    here = os.path.dirname(os.path.abspath(__file__))
+
+    def _read(name):
+        try:
+            with open(os.path.join(here, name), "rb") as fh:
+                return fh.read()
+        except Exception:
+            return None
+
     class _H(BaseHTTPRequestHandler):
         def do_GET(self):
-            self.send_response(200); self.end_headers(); self.wfile.write(b"Iris is running")
+            path = self.path.split("?")[0].rstrip("/") or "/"
+            body = None
+            if path in ("/", "/index.html"):
+                body = _read("landing.html")
+            elif path.startswith("/architecture"):
+                body = _read("architecture.html")
+            if body is not None:
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+            else:
+                self.send_response(200)
+                self.send_header("Content-Type", "text/plain; charset=utf-8")
+                self.end_headers()
+                self.wfile.write(b"Iris is running")
+
         def log_message(self, *a):
             pass
 
@@ -436,7 +463,7 @@ def _start_health_server():
         target=lambda: HTTPServer(("0.0.0.0", port), _H).serve_forever(),
         daemon=True,
     ).start()
-    log.info("iris: health server listening on :%d", port)
+    log.info("iris: web + health server listening on :%d", port)
 
 
 if __name__ == "__main__":
