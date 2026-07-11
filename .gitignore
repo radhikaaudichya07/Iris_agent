@@ -4,4 +4,4 @@ __pycache__/
 *.pyc
 iris_memory.db
 fonts/
-*.md
+git config --global user.name
