@@ -42,8 +42,8 @@ class MemoryClient:
         res = await self._session.call_tool(name, args)
         return "".join(c.text for c in res.content if getattr(c, "type", None) == "text")
 
-    def call(self, name: str, **args) -> str:
-        return self._await(self._call(name, args))
+    def call(self, _tool: str, **args) -> str:
+        return self._await(self._call(_tool, args))
 
     # --- convenience API ---
     def get_user_prefs(self, user_id: str) -> dict:
@@ -54,6 +54,12 @@ class MemoryClient:
 
     def list_sr_users(self) -> list:
         return json.loads(self.call("list_sr_users") or "[]")
+
+    def bump_stat(self, name: str, by: int = 1) -> int:
+        return int(self.call("bump_stat", name=name, by=by) or 0)
+
+    def get_stats(self) -> dict:
+        return json.loads(self.call("get_stats") or "{}")
 
     def get_image_history(self, image_key: str) -> str:
         return self.call("get_image_history", image_key=image_key)

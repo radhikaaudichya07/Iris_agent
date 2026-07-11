@@ -13,7 +13,7 @@ or the app's config doesn't support the Assistant class, the core still runs.
 from slack_bolt import Assistant
 
 
-def register_assistant(app, memory, groq, parse_preferences):
+def register_assistant(app, memory, groq, parse_preferences, impact_line=None):
     assistant = Assistant()
 
     @assistant.thread_started
@@ -22,12 +22,12 @@ def register_assistant(app, memory, groq, parse_preferences):
             ":eye: *Hi, I'm Iris.* I describe every image posted in your channels for blind and "
             "low-vision teammates — reading the data in charts, answering the conversation around "
             "them, and remembering recurring dashboards to report only what changed.\n\n"
-            "Tell me how you'd like descriptions, or ask how I work."
+            "Tell me how you'd like descriptions, ask how I work, or ask for the accessibility report."
         )
         set_suggested_prompts(prompts=[
             {"title": "I use a screen reader — DM me", "message": "I use a screen reader, please DM me descriptions"},
+            {"title": "Show the accessibility report", "message": "show me the accessibility report"},
             {"title": "Keep descriptions short", "message": "keep descriptions short"},
-            {"title": "Always give exact numbers", "message": "always give exact numbers"},
             {"title": "How do you work?", "message": "how do you work?"},
         ])
 
@@ -38,6 +38,14 @@ def register_assistant(app, memory, groq, parse_preferences):
         user_id = context.get("user_id") or payload.get("user")
 
         low = text.lower()
+        if any(w in low for w in ("report", "impact", "how many", "stats", "accessible so far")):
+            if impact_line:
+                say(":earth_africa: *Accessibility report*\n" + impact_line())
+            else:
+                stats = memory.get_stats()
+                say(f":earth_africa: Iris has made *{stats.get('images_described', 0)}* images accessible so far.")
+            return
+
         if "how do you work" in low or "what do you do" in low or low in ("help", "?"):
             say(
                 "*How I work:*\n"

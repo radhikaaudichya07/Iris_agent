@@ -34,7 +34,34 @@ def _db() -> sqlite3.Connection:
         "CREATE TABLE IF NOT EXISTS image_history("
         "image_key TEXT PRIMARY KEY, structured_summary TEXT, last_seen TEXT)"
     )
+    con.execute(
+        "CREATE TABLE IF NOT EXISTS stats(name TEXT PRIMARY KEY, value INTEGER)"
+    )
     return con
+
+
+@mcp.tool()
+def bump_stat(name: str, by: int = 1) -> str:
+    """Increment a named counter (e.g. 'images_described') and return the new total."""
+    con = _db()
+    con.execute(
+        "INSERT INTO stats(name, value) VALUES(?, ?) "
+        "ON CONFLICT(name) DO UPDATE SET value = value + ?",
+        (name, by, by),
+    )
+    con.commit()
+    row = con.execute("SELECT value FROM stats WHERE name=?", (name,)).fetchone()
+    con.close()
+    return str(row[0] if row else 0)
+
+
+@mcp.tool()
+def get_stats() -> str:
+    """Return all impact counters as a JSON object."""
+    con = _db()
+    rows = con.execute("SELECT name, value FROM stats").fetchall()
+    con.close()
+    return json.dumps({n: v for n, v in rows})
 
 
 @mcp.tool()

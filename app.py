@@ -33,6 +33,7 @@ memory = MemoryClient()   # MILESTONE C: MCP-backed image history + user prefs
 
 VISION_MODEL = "meta-llama/llama-4-scout-17b-16e-instruct"   # Groq free tier, vision-capable
 IMAGE_TYPES = {"image/png", "image/jpeg", "image/gif", "image/webp"}
+MINUTES_SAVED_PER_IMAGE = 1.5   # conservative estimate of manual alt-texting time saved
 
 
 # --- helpers ---------------------------------------------------------------
@@ -284,6 +285,7 @@ def handle_message(event, client, logger):
         prior_summary = memory.get_image_history(image_key)
         description, summary = describe_image(image_bytes, f["mimetype"], context, prior_summary)
         memory.save_image_snapshot(image_key, summary)
+        total = memory.bump_stat("images_described", 1)   # MILESTONE #2: impact counter
 
         if prior_summary.strip():
             tag = "🔁 *Change since last time* — "
@@ -291,8 +293,22 @@ def handle_message(event, client, logger):
             tag = "↪︎ *Answering the conversation* — "
         else:
             tag = ""
-        client.chat_postMessage(channel=channel, thread_ts=thread_ts,
-                                text=f":eye: *Iris:* {tag}{description}")
+
+        # #1: post the image as a NATIVE alt-texted element (standards-compliant
+        # screen-reader alt text), plus the readable description. Guarded fallback to text.
+        fallback = f":eye: *Iris:* {tag}{description}"
+        blocks = [
+            {"type": "image", "slack_file": {"id": f["id"]},
+             "alt_text": (description[:1900] or "Image description")},
+            {"type": "section", "text": {"type": "mrkdwn", "text": fallback}},
+        ]
+        try:
+            client.chat_postMessage(channel=channel, thread_ts=thread_ts,
+                                    text=fallback, blocks=blocks)
+        except Exception as e:
+            log.warning("alt-text image block failed, using text reply: %s", e)
+            client.chat_postMessage(channel=channel, thread_ts=thread_ts, text=fallback)
+        log.info("iris: images_described total=%s", total)
 
         # Personalized delivery: DM each opted-in screen-reader user their own version.
         for uid in sr_users:
@@ -305,6 +321,15 @@ def handle_message(event, client, logger):
 
 
 # --- App Home: a Block Kit control panel (for sighted configuration) --------
+
+def impact_line() -> str:
+    """MILESTONE #2: a human-readable impact summary from the stat counters."""
+    n = memory.get_stats().get("images_described", 0)
+    mins = round(n * MINUTES_SAVED_PER_IMAGE)
+    saved = f"{mins} min" if mins < 90 else f"{mins/60:.1f} hours"
+    return (f"*{n:,}* images made accessible so far &mdash; about *{saved}* of manual "
+            f"alt-texting saved, and *{n:,}* images a screen reader can now understand.").replace("&mdash;", "—")
+
 
 def build_home(prefs: dict) -> dict:
     v = prefs.get("verbosity", "standard")
@@ -320,6 +345,8 @@ def build_home(prefs: dict) -> dict:
                 "I describe every image posted in your channels for blind and low-vision teammates — "
                 "reading the *data* inside charts, *answering* the conversation around them, and "
                 "*remembering* recurring dashboards so I report only what *changed*."}},
+            {"type": "divider"},
+            {"type": "section", "text": {"type": "mrkdwn", "text": ":earth_africa: *Impact*\n" + impact_line()}},
             {"type": "divider"},
             {"type": "section", "text": {"type": "mrkdwn", "text":
                 f"*Personal delivery*\nScreen-reader DMs: *{'ON — I DM you a personalized description of every image' if sr else 'off'}*"}},
@@ -411,7 +438,7 @@ def _toggle_sr(ack, body, client):
 # support the Assistant class, the core image-describer still runs.
 try:
     from assistant_agent import register_assistant
-    register_assistant(app, memory, groq, parse_preferences)
+    register_assistant(app, memory, groq, parse_preferences, impact_line)
     log.info("iris: Assistant agent surface registered")
 except Exception as e:
     log.warning("iris: Assistant surface not registered (core still runs): %s", e)
