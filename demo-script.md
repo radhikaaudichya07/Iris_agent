@@ -1,95 +1,86 @@
-# Iris — Demo Video Script (target 2:35, hard cap 3:00)
+# Iris — Demo Video: Script + How to Record
 
-Judges are not required to watch past 3 minutes, and the "magic" must land in the first 30 seconds.
-This script is shot-by-shot: **[SCREEN]** = what to show, **[VO]** = what you say (or caption).
-
-> ♿ Meta-touch that scores points: **turn on captions/subtitles** for your own video (YouTube auto-captions
-> are fine, or burn them in). An accessibility project with an inaccessible video reads badly. Also keep
-> narration unhurried — clarity over speed.
+Target **2:35**, hard cap **3:00**. Judging is async — **this video IS your pitch.** Judges may watch
+muted, so **burn in captions.** An accessibility project with an inaccessible video looks bad, so captions
+are both good practice and points.
 
 ---
 
-## Pre-stage before recording (so it's smooth)
+## THE OPENING NARRATION (say this, or use as on-screen captions verbatim)
 
-- A Slack channel `#product-metrics` with **@iris invited**, app running (`python app.py`).
-- Two chart images ready on your desktop:
-  - **chart-v1.png** — Q3 revenue: APAC $4.2M, EMEA $3.1M, Americas $2.8M (APAC highest).
-  - **chart-v2.png** — same chart but APAC dropped to $3.0M (for the diff).
-  - *(Generate both with any chart tool; label the bars with values so the model reads them.)*
-- A second Slack user account (or your own DM) to show personalization.
-- Open tabs ready: the **landing page** and the **architecture diagram** artifacts.
-- Reset prefs in the App Home first, so the "learns you" beat starts clean.
+> "1 in 6 people live with a disability, and the EU Accessibility Act is now enforceable — yet every chart,
+> dashboard, and screenshot posted in Slack is invisible to blind teammates, because alt-text is optional
+> and nobody adds it. **Iris** is a Slack agent that reads every image, answers the conversation around it,
+> remembers recurring dashboards, and writes native screen-reader alt-text — automatically. It turns
+> accessibility from the disabled employee's daily burden into something the platform just does, and proves
+> it with a live compliance metric. Built on Slack's MCP, Real-Time Search, and Assistant APIs."
 
----
-
-## 0:00 – 0:22 · The hook (the problem)
-
-**[SCREEN]** Open on the **landing page hero** (or a real Slack image with a screen reader voicing it).
-**[VO]**
-> "This is what a blind teammate hears when someone drops a chart in Slack…"
-> *(let a screen reader say, or caption:)* **“Image. No description.”**
-> "No data. No context. A decision gets made in that thread — based on a chart they were never able to read.
-> Slack has alt-text, but it's optional, so nobody adds it. Meet **Iris**."
-
-## 0:22 – 0:55 · Milestone A + B — it answers the conversation
-
-**[SCREEN]** In `#product-metrics`, type and send: *"Are we on track for the APAC target of $3.5M?"*
-Then post **chart-v1.png**.
-**[VO]**
-> "The moment an image is posted, Iris describes it — and not just 'a bar chart.' It reads the actual data.
-> But here's the key move: it read the **question** in the thread first."
-
-**[SCREEN]** Iris's threaded reply appears: *"↪︎ Answering the conversation — Yes, APAC is $4.2M, 20% over
-the $3.5M target being discussed…"* Highlight the first line.
-**[VO]**
-> "It didn't caption the picture. It **answered the question** — the way a sighted colleague would."
-
-## 0:55 – 1:25 · Milestone C — it remembers, and reports the diff
-
-**[SCREEN]** Post **chart-v2.png** (same dashboard, APAC now $3.0M).
-**[VO]**
-> "Teams post the same dashboards every day. Watch what happens when I post an updated version."
-
-**[SCREEN]** Iris replies: *"🔁 Change since last time — Same dashboard as before, except APAC dropped from
-$4.2M to $3.0M…"*
-**[VO]**
-> "A **diff**, not a wall of text — powered by a memory server it talks to over MCP. That's genuinely more
-> useful than what a sighted person gets glancing at the chart."
-
-## 1:25 – 1:55 · Milestone D — it learns how *you* read
-
-**[SCREEN]** Open a DM with Iris. Type: *"keep it short."* Iris replies: *"Got it — I'll remember that."*
-**[SCREEN]** (Optional) Open the **App Home** tab — show the preference panel with buttons.
-**[VO]**
-> "Every person reads differently. Just tell Iris in plain language — and it remembers."
-
-**[SCREEN]** Back in the channel, post **chart-v1.png** again. Iris's reply is now **one tight line**.
-**[VO]**
-> "Same image — but now, for me, one headline. It learned me. That's the difference between a caption bot
-> and an accessibility product."
-
-## 1:55 – 2:20 · How it's built (credibility)
-
-**[SCREEN]** Cut to the **architecture diagram** artifact.
-**[VO]**
-> "Under the hood: a Slack Bolt agent fuses three signals — a vision model that reads the image, the thread
-> around it via Real-Time Search, and an **MCP memory server** for history and preferences. All Slack-native."
-
-## 2:20 – 2:35 · The impact close
-
-**[SCREEN]** Landing page closing panel: *"Put every teammate in the conversation."*
-**[VO]**
-> "One in six people live with a disability. Iris shifts accessibility from the disabled employee's daily
-> burden to something the workplace just provides — automatically, in context, for everyone. That's Iris."
-
-**[SCREEN]** End card: **Iris · Slack Agent for Good** + the eye mark.
+Use this as the spine: the **first ~25 seconds** are this hook over the landing page; the **middle** is the
+live Slack demo; the **end** returns to the landing page's closing line + architecture.
 
 ---
 
-## Recording checklist
-- [ ] Under 3:00 (aim 2:35). First 30s shows the problem + first "wow."
-- [ ] Captions on (accessibility + judges may watch muted).
-- [ ] Every claim is shown happening live, not just narrated.
-- [ ] Screen text large enough to read at 720p.
-- [ ] Public link on YouTube/Vimeo; no copyrighted music.
-- [ ] Show the app actually running (the requirement: footage of the working project).
+## SHOT LIST — alternating LANDING PAGE ⟷ LIVE SLACK
+
+Open two windows before recording:
+- **Browser** at your live site: `https://iris-agent-8msr.onrender.com/` (landing) and `/architecture`.
+- **Slack** (`IRIA` workspace) with `#product-metrics`, `@iria` invited, two chart images ready.
+
+| Time | SHOW (screen) | SAY / caption |
+|---|---|---|
+| 0:00–0:08 | **Landing hero** (scroll slowly over the headline + Slack mock) | "Every chart posted in Slack is invisible to a blind teammate." |
+| 0:08–0:25 | **Landing "before/after" section** | The pitch hook (first 2 sentences above). Let the "Image. No description." card sit on screen. |
+| 0:25–0:55 | **LIVE Slack**: type a question in a thread, post the APAC chart | "Watch. Someone asks if APAC is on track, then drops a chart." → Iris replies **answering the question**, and the reply carries **native alt-text**. |
+| 0:55–1:20 | **LIVE Slack**: re-post the updated dashboard | "Same dashboard tomorrow — Iris reports only what changed." Show the "🔁 Change since last time" reply. |
+| 1:20–1:45 | **LIVE Slack**: DM Iris "keep it short" → post an image | "Tell it how you read, and it remembers." Next description comes back as one line. |
+| 1:45–2:05 | **LIVE Slack**: open **App Home** (the Impact panel) | "And it proves its impact — images made accessible, hours saved." Point at the live number. Then caption: **"EU Accessibility Act is now law. Iris makes your workspace compliant — automatically."** |
+| 2:05–2:20 | **Landing /architecture** page | "Built on Slack's MCP, Real-Time Search, and Assistant APIs." |
+| 2:20–2:35 | **Landing closing panel** ("Put every teammate in the conversation") | "Images are the wall. Text is the door. Iris opens it — for everyone." End card: **Iris — Slack Agent for Good.** |
+
+**Most memorable 30 seconds = 0:00–0:25 hook + the 0:25–0:55 "it answered the question" reveal.** Nail those.
+
+---
+
+## HOW TO RECORD IT (step by step, Windows)
+
+### 1. Pick a recorder (any one)
+- **Easiest:** **Loom** (loom.com, free) — records screen + your voice, gives a link instantly.
+- **Built-in, no install:** press **Win + Alt + R** (Xbox Game Bar) to record the screen. Voice: enable mic in Game Bar settings.
+- **Best quality / free:** **OBS Studio** (obsproject.com) — screen capture + mic; export MP4.
+
+Record at **1080p**, windowed so text is large and legible.
+
+### 2. Stage the two windows
+- Left/full: **browser** on the landing page.
+- Have **Slack** ready to Alt-Tab to for the live parts.
+- Do a dry run once so the Slack replies appear quickly (Groq takes ~2–4s — that's fine, don't cut it, it shows it's real).
+
+### 3. Record in segments (don't do it in one nervous take)
+- Segment A: scroll the **landing page** slowly (hero → before/after → closing). ~40s of footage.
+- Segment B: the **live Slack demo** (question+chart, re-post diff, DM short, App Home number). ~90s.
+- Segment C: the **architecture page**. ~15s.
+- You'll stitch A→B→A/C in editing.
+
+### 4. Add captions (required-ish for an a11y project)
+- **Fastest:** upload the raw video to **YouTube (unlisted)** → YouTube auto-generates captions → fix typos in YouTube Studio. Judges watch it there.
+- **Burned-in (looks best):** use **CapCut** (free) → "Auto captions" → it transcribes and overlays text → export MP4, then upload to YouTube/Vimeo public.
+
+### 5. Voice or no voice
+- **With voice:** read the narration column calmly. Best option.
+- **No voice (fine):** add the narration as **on-screen captions** timed to each shot, plus soft royalty-free music (YouTube Audio Library only — no copyrighted tracks, per the rules).
+
+### 6. Export & submit
+- Under **3:00**, MP4, 1080p.
+- Upload **public** to **YouTube / Vimeo** (the rules require a public link).
+- Put the link on the Devpost submission form.
+
+---
+
+## Pre-flight checklist (do NOT skip)
+- [ ] Bot is **live** (Render up) and `@iria` is invited to `#product-metrics`.
+- [ ] Two chart images ready (one is an updated version for the "diff" beat).
+- [ ] Reset your prefs first so the "keep it short" beat is a clean before/after.
+- [ ] App Home Impact number shows a real count (post a few images first so it's not 0).
+- [ ] Captions on. Under 3:00. No copyrighted music. English.
+- [ ] Sandbox test access invited: `slackhack@salesforce.com`, `testing@devpost.com`.
+- [ ] Backup: pre-record the Slack clips separately so a live glitch can't ruin the take.
